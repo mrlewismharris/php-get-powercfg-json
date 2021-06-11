@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+.inline {display:inline}
+</style>
+</head>
+<body>
+
+<div class="batteryInfo">
+	<p class="inline" id="battInfo">Updating...</p>
+	<button id="updateBattInfo">Update</button>
+</div>
+
+<script>
+async function updateBattery() {
+	const response = await fetch("battery.php");
+	const battery = await response.json();
+	return battery;
+}
+
+async function updateBatteryEvent() {
+	document.getElementById("battInfo").innerHTML = "Updating..."
+	updateBattery().then(battery => {
+	if (battery.battery) {
+		document.getElementById("battInfo").innerHTML = "";
+		let progress = document.createElement("progress");
+			progress.value = battery.percentage;
+		let percent = document.createElement("span");
+			percent.innerText = battery.percentage + "%";
+		document.getElementById("BattInfo").appendChild(progress);
+		document.getElementById("BattInfo").appendChild(percent);
+	} else {
+		document.getElementById("battInfo").innerHTML = "Plugged In";
+	}
+}
+
+document.getElementById("updateBattInfo").addEventListener("click", updateBatteryEvent());
+
+await updateBatteryEvent();
+
+</script>
+</body>
+</html>
