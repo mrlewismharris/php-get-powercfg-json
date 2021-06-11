@@ -1,0 +1,1 @@
+# php-get-powercfg-json
